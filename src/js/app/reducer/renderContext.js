@@ -19,10 +19,14 @@ const detectingReducer = (state = initialState, action) => {
             userAgent: action.userAgent,
         })
     case 'Frontastic.RenderContext.ViewportDimensionChanged':
-        return renderContextWithDeviceType({
-            ...state,
-            viewportDimension: action.viewportDimension,
-        })
+        if (!state.viewportDimension || (action.viewportDimension && action.viewportDimension.width !== state.viewportDimension.width)) {
+            return renderContextWithDeviceType({
+                ...state,
+                viewportDimension: action.viewportDimension,
+            })
+        } else {
+            return state
+        }
     case 'ApiBundle.Api.context.success':
         if (!action.data || !action.data.project || !action.data.project.data || !action.data.project.data.layout) {
             // eslint-disable-next-line no-console
